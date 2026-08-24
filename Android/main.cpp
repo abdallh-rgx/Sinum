@@ -40,7 +40,7 @@ void* Main(void*)
 {
     Library::WaitFor(_("libUnreal.so"));
 
-    uintptr_t baseAddress = reinterpret_cast<uintptr_t>(Library::FindByName(_("libUE4.so")));
+    uintptr_t baseAddress = reinterpret_cast<uintptr_t>(Library::FindByName(_("libUnreal.so")));
     if (!baseAddress) return nullptr;
 
     uintptr_t offset = 0x0E9A36AC;
