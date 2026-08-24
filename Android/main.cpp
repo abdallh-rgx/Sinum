@@ -38,7 +38,7 @@ install_hook_name(curl_easy_setopt, void*, void* curl, int option, void* arg)
 
 void* Main(void*)
 {
-    Library::WaitFor(_("libUE4.so"));
+    Library::WaitFor(_("libUnreal.so"));
 
     uintptr_t baseAddress = reinterpret_cast<uintptr_t>(Library::FindByName(_("libUE4.so")));
     if (!baseAddress) return nullptr;
