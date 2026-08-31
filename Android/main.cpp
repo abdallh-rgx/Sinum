@@ -22,6 +22,7 @@ install_hook_name(curl_easy_setopt, void*, void* curl, int option, void* arg)
         Uri uri = Uri::Parse(url);
 
         if (uri.Host.ends_with(_("ol.epicgames.com"))
+            || uri.Host.ends_with(_("ak.epicgames.com"))
             || uri.Host.ends_with(_(".akamaized.net"))
             || uri.Host.ends_with(_("on.epicgames.com")))
         {
@@ -56,3 +57,4 @@ __attribute__((constructor)) void libsinum_main()
     pthread_t ptid;
     pthread_create(&ptid, NULL, Main, NULL);
 }
+ 
