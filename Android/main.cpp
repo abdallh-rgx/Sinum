@@ -7,12 +7,14 @@
 #include "Includes/curl.h"
 #include <dlfcn.h>
 
-#define URL_PROTOCOL_HTTP _("http")
-#define URL_HOST _("127.0.0.1:3551")
+#define URL_PROTOCOL_HTTP _("https")
+#define URL_HOST _("api.novafn.dev")
 #define URL_PORT std::string()
 
 install_hook_name(curl_easy_setopt, void*, void* curl, int option, void* arg)
 {
+    // LOGI(_("curl_easy_setopt: %i"), option);
+
     if (!Util::IsPointerBad(arg) && option == CURLOPT_URL)
     {
         std::string url = reinterpret_cast<char*>(arg);
@@ -38,14 +40,12 @@ install_hook_name(curl_easy_setopt, void*, void* curl, int option, void* arg)
 
 void* Main(void*)
 {
-    Library::WaitFor(_("libUnreal.so"));
-
-    uintptr_t baseAddress = reinterpret_cast<uintptr_t>(Library::FindByName(_("libUnreal.so")));
-    if (!baseAddress) return nullptr;
-
-    uintptr_t offset = 0x0E9A36AC;
-    void* curl_easy_setopt = reinterpret_cast<void*>(baseAddress + offset);
-
+    auto Base = dlopen(_("libUE4.so"), RTLD_NOW);
+    
+    auto curl_easy_setopt = dlsym(Base, _("curl_easy_setopt"));
+    
+    if (!curl_easy_setopt) return nullptr;
+    
     install_hook_curl_easy_setopt(curl_easy_setopt);
 
     return nullptr;
