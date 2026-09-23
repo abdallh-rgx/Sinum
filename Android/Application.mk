@@ -1,7 +1,4 @@
-APP_ABI := $(TARGET_ABI)
-ifeq ($(APP_ABI),)
-    APP_ABI := arm64-v8a
-endif
+APP_ABI := armeabi-v7a arm64-v8a
 
 APP_OPTIM        := release
 APP_PLATFORM     := android-21
