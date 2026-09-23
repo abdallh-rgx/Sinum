@@ -1,4 +1,4 @@
-Name: Build Sinum Android NDK
+name: Build Sinum Android NDK
 
 on:
   push:
