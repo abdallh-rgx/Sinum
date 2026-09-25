@@ -44,7 +44,7 @@ void* Main(void*)
     uintptr_t baseAddressUnreal = reinterpret_cast<uintptr_t>(Library::FindByName(_("libUnreal.so")));
     if (baseAddressUnreal)
     {
-        uintptr_t offsetUnreal = 0x0EA16E54;[span_0](start_span)[span_0](end_span)
+        uintptr_t offsetUnreal = 0x0EA16E54;
         void* curl_easy_setopt_unreal = reinterpret_cast<void*>(baseAddressUnreal + offsetUnreal);
         install_hook_curl_easy_setopt(curl_easy_setopt_unreal);
     }
@@ -52,7 +52,7 @@ void* Main(void*)
     uintptr_t baseAddressEOS = reinterpret_cast<uintptr_t>(Library::FindByName(_("libEOSSDK.so")));
     if (baseAddressEOS)
     {
-        uintptr_t offsetEOS = 0x01AF9A98;[span_1](start_span)[span_1](end_span)
+        uintptr_t offsetEOS = 0x01AF9A98;
         void* curl_easy_setopt_eos = reinterpret_cast<void*>(baseAddressEOS + offsetEOS);
         install_hook_curl_easy_setopt(curl_easy_setopt_eos);
     }
