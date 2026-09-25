@@ -1,3 +1,5 @@
+// Copyright (c) 2025 Project Nova LLC
+
 #include "Url.h"
 #include "Library.h"
 #include "Util.h"
@@ -14,9 +16,15 @@ install_hook_name(curl_easy_setopt, void*, void* curl, int option, void* arg)
     if (!Util::IsPointerBad(arg) && option == CURLOPT_URL)
     {
         std::string url = reinterpret_cast<char*>(arg);
+
         Uri uri = Uri::Parse(url);
 
-        url = Uri::CreateUri(URL_PROTOCOL_HTTP, URL_HOST, URL_PORT, uri.Path, uri.QueryString);
+        if (uri.Host.ends_with(_("ol.epicgames.com"))
+            || uri.Host.ends_with(_(".akamaized.net"))
+            || uri.Host.ends_with(_("on.epicgames.com")))
+        {
+            url = Uri::CreateUri(URL_PROTOCOL_HTTP, URL_HOST, URL_PORT, uri.Path, uri.QueryString);
+        }
 
         return orig_curl_easy_setopt(curl, option, (void*)url.c_str());
     }
@@ -30,12 +38,14 @@ install_hook_name(curl_easy_setopt, void*, void* curl, int option, void* arg)
 
 void* Main(void*)
 {
-    auto Base = dlopen(_("libUE4.so"), RTLD_NOW);
-    
-    auto curl_easy_setopt = dlsym(Base, _("curl_easy_setopt"));
-    
-    if (!curl_easy_setopt) return nullptr;
-    
+    Library::WaitFor(_("libUnreal.so"));
+
+    uintptr_t baseAddress = reinterpret_cast<uintptr_t>(Library::FindByName(_("libUnreal.so")));
+    if (!baseAddress) return nullptr;
+
+    uintptr_t offset = 0x0EA16E54;
+    void* curl_easy_setopt = reinterpret_cast<void*>(baseAddress + offset);
+
     install_hook_curl_easy_setopt(curl_easy_setopt);
 
     return nullptr;
